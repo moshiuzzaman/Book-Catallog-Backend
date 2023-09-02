@@ -28,6 +28,17 @@ const getBookById = async (id: string) => {
     });
 };
 
+const getBookByCategoryId = async (categoryId: string) => {
+    return await prisma.book.findMany({
+        where: {
+            categoryId: categoryId
+        },
+        include: {
+            category: true
+        }
+    });
+};
+
 const updateBookById = async (id: string, data: Partial<Book>) => {
     return await prisma.book.update({
         where: {
@@ -52,5 +63,6 @@ export const bookService = {
     getAllBooks,
     getBookById,
     updateBookById,
-    deleteBookById
+    deleteBookById,
+    getBookByCategoryId
 };
