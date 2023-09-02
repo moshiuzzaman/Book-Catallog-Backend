@@ -24,6 +24,19 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
                     message
                 }
             ];
+        } else if (
+            error.message.includes('update()` invocation:') ||
+            error.message.includes('create()` invocation:')
+        ) {
+            const fieldName = error.meta?.field_name as string;
+            const output = fieldName?.split('_')[1];
+            message = `invalid ${output} `;
+            errors = [
+                {
+                    path: output,
+                    message
+                }
+            ];
         }
     } else if (error.code === 'P2002') {
         message = `${error.meta?.target?.toString() ?? ''} already exist`;
@@ -43,4 +56,3 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
 };
 
 export default handleClientError;
-
