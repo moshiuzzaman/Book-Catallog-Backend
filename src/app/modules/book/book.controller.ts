@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import { bookService } from './book.service';
+import { bookFilterableFields } from './books.constants';
 
 const crateBook = catchAsync(async (req: Request, res: Response) => {
     const result = await bookService.createBook(req.body);
@@ -12,10 +14,20 @@ const crateBook = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllBooks = catchAsync(async (req: Request, res: Response) => {
-    const result = await bookService.getAllBooks();
+    const filters = pick(req.query, bookFilterableFields);
+    const options = pick(req.query, [
+        'size',
+        'page',
+        'sortBy',
+        'sortOrder',
+        'minPrice',
+        'maxPrice'
+    ]);
+    const result = await bookService.getAllBooks(filters, options);
     sendResponse(res, {
         message: 'Books retrieved successfully',
-        data: result
+        meta: result.meta,
+        data: result.data
     });
 });
 
@@ -28,12 +40,23 @@ const getBookById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getBookByCategoryId = catchAsync(async (req: Request, res: Response) => {
-    const result = await bookService.getBookByCategoryId(req.params.id);
+    const options = pick(req.query, [
+        'size',
+        'page',
+        'sortBy',
+        'sortOrder',
+        'minPrice',
+        'maxPrice'
+    ]);
+    const result = await bookService.getBookByCategoryId(
+        req.params.id,
+        options
+    );
     sendResponse(res, {
         message: 'Books retrieved successfully',
         data: result
     });
-})
+});
 
 const updateBookById = catchAsync(async (req: Request, res: Response) => {
     const result = await bookService.updateBookById(req.params.id, req.body);
