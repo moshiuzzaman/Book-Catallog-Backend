@@ -111,10 +111,11 @@ const getBookByCategoryId = async (
     options: IPaginationOptions
 ) => {
     const { size, page, skip } = paginationHelpers.calculatePagination(options);
+    console.log('incategory', categoryId);
 
     const result = await prisma.book.findMany({
         where: {
-            categoryId: categoryId
+            categoryId
         },
         include: {
             category: true

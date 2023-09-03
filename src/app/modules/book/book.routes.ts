@@ -14,8 +14,8 @@ router.post(
     bookController.crateBook
 );
 router.get('/', bookController.getAllBooks);
-router.get('/:id', bookController.getBookById);
 router.get('/:categoryId/category', bookController.getBookByCategoryId);
+router.get('/:id', bookController.getBookById);
 router.put(
     '/:id',
     validateRequest(bookValidation.update),

@@ -49,7 +49,7 @@ const getBookByCategoryId = catchAsync(async (req: Request, res: Response) => {
         'maxPrice'
     ]);
     const result = await bookService.getBookByCategoryId(
-        req.params.id,
+        req.params.categoryId,
         options
     );
     sendResponse(res, {
