@@ -17,6 +17,10 @@ const getUserById = async (id: string) => {
             id: id
         }
     });
+    if (!result) {
+        throw new Error('User not found');
+    }
+
     const userWithoutPassword = exclude(result, ['password']);
     return userWithoutPassword;
 };

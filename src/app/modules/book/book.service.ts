@@ -92,7 +92,7 @@ const getAllBooks = async (
 };
 
 const getBookById = async (id: string) => {
-    return await prisma.book.findUnique({
+    const result = await prisma.book.findUnique({
         where: {
             id: id
         },
@@ -100,6 +100,10 @@ const getBookById = async (id: string) => {
             category: true
         }
     });
+    if (!result) {
+        throw new Error('Invalid book id');
+    }
+    return result;
 };
 
 const getBookByCategoryId = async (

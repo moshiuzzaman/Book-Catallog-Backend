@@ -8,7 +8,7 @@ import { bookValidation } from './book.validation';
 const router = express.Router();
 
 router.post(
-    '/',
+    '/create-book',
     validateRequest(bookValidation.create),
     auth(Role.admin),
     bookController.crateBook

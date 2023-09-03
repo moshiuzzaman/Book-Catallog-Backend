@@ -8,7 +8,7 @@ import { orderValidation } from './order.velidation';
 const router = express.Router();
 
 router.post(
-    '/',
+    '/create-order',
     auth(Role.customer),
     validateRequest(orderValidation.createValidation),
 

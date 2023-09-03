@@ -7,6 +7,7 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     const result = await userService.getAllUsers();
 
     sendResponse(res, {
+        
         message: 'Users retrieved successfullyF',
         data: result
     });

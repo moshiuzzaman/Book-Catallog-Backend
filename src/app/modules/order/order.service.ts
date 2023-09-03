@@ -41,10 +41,11 @@ const getOrders = (token: string) => {
     });
 };
 
-const getOrderById = (id: string, token: string) => {
+const getOrderById = async(id: string, token: string) => {
     const { userId, role } = jwtHelpers.decodeToken(token);
+    let result;
     if (role == 'admin') {
-        return prisma.order.findUnique({
+        result =await prisma.order.findUnique({
             where: {
                 id
             },
@@ -52,13 +53,22 @@ const getOrderById = (id: string, token: string) => {
                 orderedBooks: true
             }
         });
+    } else {
+        result =await prisma.order.findUnique({
+            where: {
+                id,
+                userId
+            },
+            include: {
+                orderedBooks: true
+            }
+        });
     }
-    return prisma.order.findUnique({
-        where: {
-            id,
-            userId
-        }
-    });
+
+    if (!result) {
+        throw new Error('Invalid order id');
+    }
+    return result;
 };
 
 export const orderService = {
